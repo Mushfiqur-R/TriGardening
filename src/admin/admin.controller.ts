@@ -12,9 +12,9 @@ export class AdminController {
       return this.adminService.createrole(roledata)
      }
 
-    // @Post("createUser")
-    // createUser(@Body() createUser:createUserDto){
-    //   return this.adminService.createUser(createUser);
-    // }
+    @Post("createUser")
+    createUser(@Body() userData:createUserDto){
+      return this.adminService.createUser(userData);
+    }
     
 }

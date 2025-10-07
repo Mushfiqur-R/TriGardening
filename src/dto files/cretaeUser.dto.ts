@@ -4,11 +4,11 @@ export class createUserDto{
 
     @IsString()
     @IsNotEmpty()
-    fullname:string
+    name:string
     
     @IsString()
     @IsNotEmpty()
-    phoneNumber:string
+    phoneno:string
 
     @IsNotEmpty()
     @IsString()
@@ -30,11 +30,17 @@ export class createUserDto{
     @IsString()
     address?:string
 
-    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
     @IsEmail()
-    email?:string
+    email:string
+    
+    @IsString()
+    usertype:string
 
     @IsOptional()
     @IsString()
     secondaryNumber?:string
+
+
 }
