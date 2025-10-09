@@ -1,13 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Prisma, PrismaClient, Role, User } from '@prisma/client';
 import { createUserDto } from 'src/dto files/cretaeUser.dto';
 import { CreateRoleDto } from 'src/dto files/Role.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt'
+import { JwtService } from '@nestjs/jwt';
 import { connect } from 'http2';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 @Injectable()
 export class AdminService {
-     constructor(private prisma:PrismaService){}
+     constructor(private prisma:PrismaService,
+                private jwtService:JwtService
+     ){}
     async createrole(roledata:CreateRoleDto):Promise<Role>{
         return this.prisma.role.create({
          data:{
@@ -67,6 +71,44 @@ catch (error: unknown) {
         message: 'Something went wrong!',
         error,
       };
+    }
+
+    async login(email:string,password:string){
+      const user= await this.prisma.user.findUnique({
+        where :{
+          email
+        },
+        include:{role:true}
+      });
+      if(!user){
+        throw new UnauthorizedException('Invalid credentials.')
+      }
+
+      const isMatch= await bcrypt.compare(password,user.password);
+      if(!isMatch){
+        throw new UnauthorizedException("Invalid Credentials");
+      }
+      const payload ={
+        sub:user.id,
+        email:user.email,
+        role:user.role.name
+      }
+      const token = await this.jwtService.signAsync(payload,{
+        secret:process.env.SECRET_KEY||'secretkey',
+        expiresIn:'1d',
+      })
+
+      return {
+      status: 'success',
+      message: 'Login successful',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role.name,
+      },
+    };
     }
   
 }
