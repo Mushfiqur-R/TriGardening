@@ -39,3 +39,4 @@ model User{
   usertype String
   role Role @relation(fields: [role_id],references: [id])
 }
+
