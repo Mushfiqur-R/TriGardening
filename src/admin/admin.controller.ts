@@ -4,6 +4,7 @@ import { createUserDto } from 'src/dto files/cretaeUser.dto';
 import { CreateRoleDto } from 'src/dto files/Role.dto';
 import { LoginDto } from 'src/dto files/Login.dto';
 import { AdminGuard } from 'src/auth/adminGuard';
+import { CatagoryDto } from 'src/dto files/catagory.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -25,5 +26,11 @@ export class AdminController {
     createUser(@Body() userData:createUserDto){
       return this.adminService.createUser(userData);
     }
+    @Post("createcatagory")
+    @UseGuards(AdminGuard)
+    createcatagory(@Body()CatagoryData:CatagoryDto){
+    return this.adminService.createCatagory(CatagoryData);
+    }
+
     
 }

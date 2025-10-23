@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { Prisma, PrismaClient, Role, User } from '@prisma/client';
+import { Catagory, Prisma, PrismaClient, Role, User } from '@prisma/client';
 import { createUserDto } from 'src/dto files/cretaeUser.dto';
 import { CreateRoleDto } from 'src/dto files/Role.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { connect } from 'http2';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { CatagoryDto } from 'src/dto files/catagory.dto';
 @Injectable()
 export class AdminService {
      constructor(private prisma:PrismaService,
@@ -109,6 +110,17 @@ catch (error: unknown) {
         role: user.role.name,
       },
     };
+    }
+
+   async createCatagory(CatagoryData:CatagoryDto):Promise<Catagory>{
+        return this.prisma.catagory.create(
+         {
+          data:{
+            name:CatagoryData.name,
+            description:CatagoryData.description
+          }
+         }
+        )
     }
   
 }

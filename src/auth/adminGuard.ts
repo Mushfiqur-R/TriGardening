@@ -22,7 +22,7 @@ export class AdminGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(
         token,
         {
-          secret: process.env.JWT_SECRET||"secretKey",
+          secret: process.env.JWT_SECRET||"secretkey",
         }
       );
       // 💡 We're assigning the payload to the request object here

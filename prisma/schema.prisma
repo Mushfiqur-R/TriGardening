@@ -40,3 +40,8 @@ model User{
   role Role @relation(fields: [role_id],references: [id])
 }
 
+ model Catagory {
+      catagory_id Int @id @default(autoincrement())
+      name String
+      description String
+ }
